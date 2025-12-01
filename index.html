@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneTales | Dein persönlicher Song in 24h</title>
+    
+    <!-- Google Fonts: Poppins (Modern & Clean) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (für Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons (Moderne Icons) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Config für deine Farben -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deepBlue: '#0F2C59',
+                        magicPurple: '#8E44AD',
+                        vividPurple: '#A020F0',
+                        warmCoral: '#FF6B6B',
+                        coralHover: '#ff5252',
+                        lightBg: '#F8F9FA',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        hand: ['Caveat', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles für den Audio Player & Animationen */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #A020F0, #FF6B6B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .wave-bar {
+            width: 4px;
+            background-color: #A020F0;
+            border-radius: 2px;
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; opacity: 0.5; }
+            50% { height: 25px; opacity: 1; }
+        }
+        
+        /* Verschiedene Delays für die Wave-Animation */
+        .wave-bar:nth-child(1) { animation-duration: 0.8s; }
+        .wave-bar:nth-child(2) { animation-duration: 1.1s; }
+        .wave-bar:nth-child(3) { animation-duration: 0.9s; }
+        .wave-bar:nth-child(4) { animation-duration: 1.2s; }
+        .wave-bar:nth-child(5) { animation-duration: 0.7s; }
+    </style>
+</head>
+<body class="bg-lightBg text-slate-800 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="bg-deepBlue p-2 rounded-lg text-white">
+                        <i data-lucide="music" class="w-6 h-6"></i>
+                    </div>
+                    <span class="font-bold text-2xl text-deepBlue tracking-tight">TuneTales</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#demos" class="text-slate-600 hover:text-deepBlue font-medium transition">Hörproben</a>
+                    <a href="#prozess" class="text-slate-600 hover:text-deepBlue font-medium transition">So geht's</a>
+                    <a href="#preise" class="text-slate-600 hover:text-deepBlue font-medium transition">Preise</a>
+                    <a href="#about" class="text-slate-600 hover:text-deepBlue font-medium transition">Über uns</a>
+                    <a href="#preise" class="bg-warmCoral hover:bg-coralHover text-white px-6 py-2.5 rounded-full font-bold shadow-lg shadow-warmCoral/30 transition transform hover:-translate-y-0.5">
+                        Song erstellen
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-deepBlue focus:outline-none">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full">
+            <div class="px-4 pt-2 pb-6 space-y-2 shadow-lg">
+                <a href="#demos" class="block px-3 py-3 text-slate-600 font-medium hover:bg-slate-50 rounded-md">Hörproben</a>
+                <a href="#prozess" class="block px-3 py-3 text-slate-600 font-medium hover:bg-slate-50 rounded-md">So geht's</a>
+                <a href="#preise" class="block px-3 py-3 text-slate-600 font-medium hover:bg-slate-50 rounded-md">Preise</a>
+                <a href="#about" class="block px-3 py-3 text-slate-600 font-medium hover:bg-slate-50 rounded-md">Über uns</a>
+                <a href="#preise" class="block px-3 py-3 text-warmCoral font-bold hover:bg-slate-50 rounded-md">Jetzt Song erstellen →</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-deepBlue text-white">
+        <!-- Abstract Background Elements -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-magicPurple/30 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-warmCoral/20 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <span class="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-sm font-semibold tracking-wide mb-6 text-warmCoral">
+                    ✨ Das persönlichste Geschenk der Welt
+                </span>
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
+                    Deine Geschichte. <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-vividPurple to-warmCoral">Dein Soundtrack.</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-10 font-light leading-relaxed">
+                    Wir verwandeln deine persönlichen Erinnerungen in einen professionellen Song. <br class="hidden md:block">High-Tech komponiert, in Studio-Qualität, geliefert in 24 Stunden.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#preise" class="bg-warmCoral hover:bg-coralHover text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-warmCoral/30 transition transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <i data-lucide="music"></i> Song jetzt gestalten
+                    </a>
+                    <a href="#demos" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-full font-bold text-lg backdrop-blur-sm transition flex items-center justify-center gap-2">
+                        <i data-lucide="play-circle"></i> Beispiele hören
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wave Divider -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+            <svg class="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-lightBg"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Demos / Audio Player Section -->
+    <section id="demos" class="py-20 bg-lightBg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-deepBlue mb-4">Hör es dir selbst an</h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                    Jeder Song wurde basierend auf echten Kundengeschichten erstellt. <br>
+                    <span class="font-hand text-2xl text-magicPurple transform -rotate-2 inline-block mt-2">100% einzigartig.</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Demo Card 1 -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 group hover:shadow-2xl transition">
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 h-32 flex items-center justify-center relative">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition"></div>
+                        <button class="play-btn w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg text-indigo-600 hover:scale-110 transition cursor-pointer z-10" onclick="togglePlay(this)">
+                            <i data-lucide="play" class="fill-current ml-1"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-xl text-deepBlue">Für Julia</h3>
+                            <span class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">Hochzeit</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4 italic">"Eine emotionale Piano-Ballade über unser erstes Date in Berlin."</p>
+                        
+                        <!-- Fake Progress Bar -->
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                            <div class="bg-indigo-500 h-1.5 rounded-full" style="width: 45%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-400">
+                            <span>1:12</span>
+                            <span>2:45</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Card 2 -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 group hover:shadow-2xl transition">
+                    <div class="bg-gradient-to-br from-warmCoral to-orange-500 h-32 flex items-center justify-center relative">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition"></div>
+                        <button class="play-btn w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg text-warmCoral hover:scale-110 transition cursor-pointer z-10" onclick="togglePlay(this)">
+                            <i data-lucide="play" class="fill-current ml-1"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-xl text-deepBlue">Alles Gute Tobi</h3>
+                            <span class="text-xs font-bold bg-orange-100 text-orange-700 px-2 py-1 rounded-full">40. Geburtstag</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4 italic">"Pop-Rock im Stil der Ärzte. Lustig, laut und voller Insider-Witze."</p>
+                         
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                            <div class="bg-warmCoral h-1.5 rounded-full" style="width: 30%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-400">
+                            <span>0:45</span>
+                            <span>3:10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Card 3 -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 group hover:shadow-2xl transition">
+                    <div class="bg-gradient-to-br from-teal-400 to-emerald-600 h-32 flex items-center justify-center relative">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition"></div>
+                        <button class="play-btn w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg text-emerald-600 hover:scale-110 transition cursor-pointer z-10" onclick="togglePlay(this)">
+                            <i data-lucide="play" class="fill-current ml-1"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-xl text-deepBlue">Danke Mama</h3>
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">Dankeschön</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4 italic">"Singer-Songwriter Akustik. Warm, dankbar und rührend."</p>
+                        
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                            <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 70%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-400">
+                            <span>2:10</span>
+                            <span>2:55</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section id="prozess" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-deepBlue mb-4">So entsteht dein Song</h2>
+                <p class="text-lg text-slate-600">Drei einfache Schritte zu deinem Unikat.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative">
+                <!-- Connector Line for Desktop -->
+                <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gray-100 -z-10 transform scale-x-75"></div>
+
+                <!-- Step 1 -->
+                <div class="relative bg-white p-6">
+                    <div class="w-24 h-24 mx-auto bg-deepBlue/5 rounded-full flex items-center justify-center mb-6 relative">
+                        <i data-lucide="pen-tool" class="w-10 h-10 text-deepBlue"></i>
+                        <span class="absolute -top-2 -right-2 w-8 h-8 bg-warmCoral text-white rounded-full flex items-center justify-center font-bold">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Erzähl deine Story</h3>
+                    <p class="text-gray-500 leading-relaxed">Fülle unseren smarten Fragebogen aus. Nenne uns Namen, Anekdoten und den gewünschten Vibe.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative bg-white p-6">
+                    <div class="w-24 h-24 mx-auto bg-magicPurple/5 rounded-full flex items-center justify-center mb-6 relative">
+                        <i data-lucide="wand-2" class="w-10 h-10 text-magicPurple"></i>
+                        <span class="absolute -top-2 -right-2 w-8 h-8 bg-warmCoral text-white rounded-full flex items-center justify-center font-bold">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Wir kreieren Magie</h3>
+                    <p class="text-gray-500 leading-relaxed">Wir texten deine Geschichte und verwandeln sie mit modernster AI-Technologie in einen perfekten Song.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative bg-white p-6">
+                    <div class="w-24 h-24 mx-auto bg-green-50 rounded-full flex items-center justify-center mb-6 relative">
+                        <i data-lucide="download" class="w-10 h-10 text-green-600"></i>
+                        <span class="absolute -top-2 -right-2 w-8 h-8 bg-warmCoral text-white rounded-full flex items-center justify-center font-bold">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Dein Hit ist da</h3>
+                    <p class="text-gray-500 leading-relaxed">Innerhalb von 24 Stunden landet dein persönlicher Song als MP3 direkt in deinem Postfach.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="preise" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-deepBlue mb-4">Wähle dein Paket</h2>
+                <p class="text-lg text-slate-600">Fair, transparent und blitzschnell.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
+                
+                <!-- Basic Plan -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:-translate-y-1 transition duration-300">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Hit-Single</h3>
+                    <div class="text-4xl font-bold text-deepBlue mb-6">29,90 €</div>
+                    <p class="text-sm text-gray-500 mb-6">Der perfekte Einstieg für ein schnelles, persönliches Geschenk.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-2"></i> Individueller Song (MP3)</li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-2"></i> Songtext als PDF</li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-2"></i> Lieferung in 24h</li>
+                    </ul>
+                    <button class="w-full py-3 px-6 border-2 border-deepBlue text-deepBlue font-bold rounded-xl hover:bg-deepBlue hover:text-white transition">Jetzt bestellen</button>
+                </div>
+
+                <!-- Bestseller Plan (Highlighted) -->
+                <div class="bg-white p-8 rounded-2xl shadow-2xl border-2 border-magicPurple relative transform md:scale-105 z-10">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-magicPurple text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide shadow-md">
+                        Bestseller
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Chart-Topper</h3>
+                    <div class="text-4xl font-bold text-magicPurple mb-6">49,90 €</div>
+                    <p class="text-sm text-gray-500 mb-6">Die volle Qualität für besondere Anlässe. Unser Kundenliebling.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-magicPurple mr-2"></i> <strong>Alles aus Hit-Single</strong></li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-magicPurple mr-2"></i> High-Quality WAV Datei</li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-magicPurple mr-2"></i> Digitales Plattencover (Cover Art)</li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-magicPurple mr-2"></i> Priorisierter Support</li>
+                    </ul>
+                    <button class="w-full py-4 px-6 bg-gradient-to-r from-magicPurple to-vividPurple text-white font-bold rounded-xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition transform hover:-translate-y-1">Jetzt bestellen</button>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:-translate-y-1 transition duration-300">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Video-Star</h3>
+                    <div class="text-4xl font-bold text-deepBlue mb-6">79,90 €</div>
+                    <p class="text-sm text-gray-500 mb-6">Das Komplettpaket für Social Media und den großen Auftritt.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-2"></i> <strong>Alles aus Chart-Topper</strong></li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-2"></i> Lyric-Video (MP4)</li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-2"></i> Format für Handy & TV</li>
+                        <li class="flex items-center text-slate-600"><i data-lucide="check" class="w-5 h-5 text-green-500 mr-2"></i> 2 verschiedene Versionen</li>
+                    </ul>
+                    <button class="w-full py-3 px-6 border-2 border-deepBlue text-deepBlue font-bold rounded-xl hover:bg-deepBlue hover:text-white transition">Jetzt bestellen</button>
+                </div>
+
+            </div>
+            
+            <p class="text-center text-gray-400 mt-12 text-sm">Preise inkl. MwSt. Sichere Bezahlung via PayPal, Kreditkarte oder Apple Pay.</p>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-20 bg-deepBlue text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+             <!-- Background Pattern -->
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8">Technologie trifft Herz.</h2>
+            <div class="text-lg md:text-xl font-light leading-relaxed space-y-6 text-gray-200">
+                <p>
+                    Bisher waren persönliche Songs ein teurer Luxus. Wir bei <strong class="text-white font-bold">TuneTales</strong> ändern das. 
+                    Wir glauben: Jede Liebesgeschichte, jeder Geburtstag und jeder Abschied verdient einen eigenen Soundtrack.
+                </p>
+                <p>
+                    Wir sind keine gewöhnliche Musikagentur. Wir sind "Song-Architekten". 
+                    Wir kombinieren menschliches Feingefühl mit modernster Audio-Technologie. 
+                </p>
+                <div class="bg-white/10 p-6 rounded-xl border border-white/20 mt-8 backdrop-blur-sm inline-block">
+                    <p class="font-hand text-2xl text-warmCoral">
+                        "Ein Song sagt mehr als tausend Worte – besonders wenn er nur für dich geschrieben wurde."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4 text-white">
+                        <i data-lucide="music" class="w-6 h-6 text-warmCoral"></i>
+                        <span class="font-bold text-xl">TuneTales</span>
+                    </div>
+                    <p class="text-sm">Konservierte Emotionen. <br>In Perfektion komponiert.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Produkt</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-warmCoral transition">Hörproben</a></li>
+                        <li><a href="#" class="hover:text-warmCoral transition">Preise</a></li>
+                        <li><a href="#" class="hover:text-warmCoral transition">Geschenkgutscheine</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Rechtliches</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-warmCoral transition">Impressum</a></li>
+                        <li><a href="#" class="hover:text-warmCoral transition">Datenschutz</a></li>
+                        <li><a href="#" class="hover:text-warmCoral transition">AGB</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Kontakt</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>hallo@tunetales.de</li>
+                        <li class="flex gap-4 mt-4">
+                            <a href="#" class="hover:text-white transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                            <a href="#" class="hover:text-white transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                            <a href="#" class="hover:text-white transition"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-center text-xs">
+                &copy; 2024 TuneTales. All rights reserved. Made with <i data-lucide="heart" class="inline w-3 h-3 text-warmCoral"></i> & AI.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Sticky Navbar Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                nav.classList.add('shadow-md');
+                nav.classList.replace('bg-white/90', 'bg-white/95');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.replace('bg-white/95', 'bg-white/90');
+            }
+        });
+
+        // Fake Audio Player Logic (Visual Only for Demo)
+        function togglePlay(btn) {
+            const icon = btn.querySelector('svg');
+            
+            // Reset all other buttons
+            document.querySelectorAll('.play-btn').forEach(b => {
+                if(b !== btn) {
+                    // Reset icon to play (create new play icon element)
+                    b.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play fill-current ml-1"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>';
+                    b.classList.remove('scale-110', 'ring-4', 'ring-opacity-50');
+                }
+            });
+
+            // Toggle current button
+            if (btn.innerHTML.includes('polygon')) {
+                // Change to pause
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause fill-current"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+                btn.classList.add('ring-4', 'ring-warmCoral/30');
+            } else {
+                // Change back to play
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play fill-current ml-1"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>';
+                btn.classList.remove('ring-4', 'ring-warmCoral/30');
+            }
+        }
+    </script>
+</body>
+</html>
